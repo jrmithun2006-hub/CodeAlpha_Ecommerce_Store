@@ -1,0 +1,29 @@
+# Node.js / Backend
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+package-lock.json
+.env
+.DS_Store
+
+# Database file (optional – you may want to keep ecommerce.db if you want to share sample data)
+# ecommerce.db
+
+# VS Code settings (optional)
+.vscode/
+*.code-workspace
+
+# Windows thumbnails
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# OS metadata
+.DS_Store
+.idea/
+*.swp
+*.swo
+*~

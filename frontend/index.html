@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🛍️ ShopEase - E-Commerce Store</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fb;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .logo span {
+            color: #ffd700;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 1.8rem;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -10px;
+            right: -12px;
+            background: #ff4757;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 7px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-name {
+            font-weight: 500;
+        }
+
+        .btn-logout {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .btn-logout:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .btn-login {
+            background: #ffd700;
+            color: #1e3c72;
+            border: none;
+            padding: 6px 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: #1e3c72;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .product-image {
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+        }
+
+        .product-info {
+            padding: 1.2rem;
+        }
+
+        .product-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .product-category {
+            font-size: 0.8rem;
+            color: #888;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-description {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+
+        .product-price {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #2a5298;
+            margin-bottom: 1rem;
+        }
+
+        .btn-add {
+            width: 100%;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: opacity 0.3s;
+        }
+
+        .btn-add:hover {
+            opacity: 0.9;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 420px;
+            height: 100%;
+            background: white;
+            box-shadow: -2px 0 20px rgba(0,0,0,0.15);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .modal.show {
+            display: block;
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            font-size: 1.3rem;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.8rem;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 1rem;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item-info h4 {
+            margin-bottom: 0.25rem;
+            font-size: 1rem;
+        }
+
+        .cart-item-price {
+            color: #2a5298;
+            font-weight: bold;
+        }
+
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quantity-btn {
+            background: #f0f0f0;
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        .quantity-btn:hover {
+            background: #ddd;
+        }
+
+        .remove-btn {
+            background: #ff4757;
+            color: white;
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .cart-total {
+            padding: 1.2rem;
+            border-top: 2px solid #eee;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-align: right;
+            background: #f8f9fa;
+        }
+
+        .btn-checkout {
+            width: calc(100% - 2rem);
+            margin: 1rem;
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        .btn-checkout:hover {
+            background: #218838;
+        }
+
+        .auth-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .auth-overlay.show {
+            display: flex;
+        }
+
+        .auth-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            width: 380px;
+            max-width: 90%;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .auth-card h2 {
+            margin-bottom: 1.5rem;
+            text-align: center;
+            color: #1e3c72;
+        }
+
+        .auth-card input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+
+        .auth-card button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .auth-switch {
+            text-align: center;
+            margin-top: 1rem;
+            color: #2a5298;
+            cursor: pointer;
+        }
+
+        .auth-switch:hover {
+            text-decoration: underline;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 12px 24px;
+            border-radius: 10px;
+            color: white;
+            z-index: 3000;
+            animation: slideIn 0.3s ease;
+            font-weight: 500;
+        }
+
+        .toast.success {
+            background: #28a745;
+        }
+
+        .toast.error {
+            background: #dc3545;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 3rem;
+            color: #888;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            font-size: 1.2rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="logo" onclick="location.reload()">🛍️ Shop<span>Ease</span></div>
+            <div class="nav-links">
+                <div class="cart-icon" onclick="toggleCart()">
+                    🛒
+                    <span class="cart-count" id="cartCount">0</span>
+                </div>
+                <div class="user-info" id="userInfo"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1 class="section-title">✨ Featured Products</h1>
+        <div class="products-grid" id="productsGrid">
+            <div class="loading">Loading products...</div>
+        </div>
+    </div>
+
+    <div class="modal" id="cartModal">
+        <div class="modal-header">
+            <h3>🛒 Your Shopping Cart</h3>
+            <button class="close-modal" onclick="toggleCart()">&times;</button>
+        </div>
+        <div class="modal-body" id="cartItems">
+            <div class="empty-cart">Your cart is empty</div>
+        </div>
+    </div>
+
+    <div class="auth-overlay" id="authModal">
+        <div class="auth-card">
+            <h2 id="authTitle">Login</h2>
+            <input type="text" id="authName" placeholder="Full Name" style="display:none;">
+            <input type="email" id="authEmail" placeholder="Email Address">
+            <input type="password" id="authPassword" placeholder="Password">
+            <button id="authButton" onclick="handleAuth()">Login</button>
+            <div class="auth-switch" onclick="toggleAuthMode()">
+                Don't have an account? Register
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let products = [];
+        let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        let token = localStorage.getItem('token');
+        let currentUser = JSON.parse(localStorage.getItem('user') || 'null');
+        let isLoginMode = true;
+        const API_URL = 'http://localhost:5000';
+
+        function showMessage(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        function updateCartUI() {
+            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cartCount').innerText = count;
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
+
+        function renderCartModal() {
+            const container = document.getElementById('cartItems');
+            
+            if (cart.length === 0) {
+                container.innerHTML = '<div class="empty-cart">🛒 Your cart is empty</div>';
+                return;
+            }
+            
+            let total = 0;
+            let html = '';
+            
+            cart.forEach((item, index) => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                
+                html += `
+                    <div class="cart-item">
+                        <div class="cart-item-info">
+                            <h4>${item.name}</h4>
+                            <div class="cart-item-price">$${item.price.toFixed(2)}</div>
+                        </div>
+                        <div class="cart-item-quantity">
+                            <button class="quantity-btn" onclick="updateQuantity(${index}, -1)">-</button>
+                            <span>${item.quantity}</span>
+                            <button class="quantity-btn" onclick="updateQuantity(${index}, 1)">+</button>
+                            <button class="remove-btn" onclick="removeFromCart(${index})">×</button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += `
+                <div class="cart-total">
+                    Total: $${total.toFixed(2)}
+                </div>
+                <button class="btn-checkout" onclick="checkout()">✅ Proceed to Checkout</button>
+            `;
+            
+            container.innerHTML = html;
+        }
+
+        function updateQuantity(index, change) {
+            const newQty = cart[index].quantity + change;
+            if (newQty <= 0) {
+                cart.splice(index, 1);
+            } else {
+                cart[index].quantity = newQty;
+            }
+            updateCartUI();
+            renderCartModal();
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+            renderCartModal();
+            showMessage('Item removed from cart');
+        }
+
+        function addToCart(product) {
+            const existing = cart.find(item => item.id === product._id);
+            if (existing) {
+                existing.quantity++;
+            } else {
+                cart.push({
+                    id: product._id,
+                    name: product.name,
+                    price: product.price,
+                    quantity: 1
+                });
+            }
+            updateCartUI();
+            renderCartModal();
+            showMessage(`${product.name} added to cart! 🎉`);
+        }
+
+        function toggleCart() {
+            renderCartModal();
+            document.getElementById('cartModal').classList.toggle('show');
+        }
+
+        function toggleAuthModal() {
+            document.getElementById('authModal').classList.toggle('show');
+        }
+
+        function toggleAuthMode() {
+            isLoginMode = !isLoginMode;
+            const title = document.getElementById('authTitle');
+            const nameField = document.getElementById('authName');
+            const authButton = document.getElementById('authButton');
+            
+            if (isLoginMode) {
+                title.textContent = 'Login';
+                nameField.style.display = 'none';
+                authButton.textContent = 'Login';
+                document.querySelector('.auth-switch').textContent = "Don't have an account? Register";
+            } else {
+                title.textContent = 'Register';
+                nameField.style.display = 'block';
+                authButton.textContent = 'Register';
+                document.querySelector('.auth-switch').textContent = 'Already have an account? Login';
+            }
+        }
+
+        async function handleAuth() {
+            const email = document.getElementById('authEmail').value;
+            const password = document.getElementById('authPassword').value;
+            
+            if (!email || !password) {
+                showMessage('Please fill all fields', 'error');
+                return;
+            }
+            
+            if (isLoginMode) {
+                try {
+                    const response = await fetch(`${API_URL}/api/login`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email, password })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok) {
+                        token = data.token;
+                        currentUser = { _id: data.userId, name: data.name, email: data.email };
+                        localStorage.setItem('token', token);
+                        localStorage.setItem('user', JSON.stringify(currentUser));
+                        toggleAuthModal();
+                        updateUserUI();
+                        showMessage(`Welcome back, ${data.name}! 🎉`);
+                    } else {
+                        showMessage(data.error || 'Login failed', 'error');
+                    }
+                } catch (error) {
+                    showMessage('Cannot connect to server. Is backend running?', 'error');
+                }
+            } else {
+                const name = document.getElementById('authName').value;
+                if (!name) {
+                    showMessage('Please enter your name', 'error');
+                    return;
+                }
+                
+                try {
+                    const response = await fetch(`${API_URL}/api/register`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ name, email, password })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok) {
+                        showMessage('Registration successful! Please login.', 'success');
+                        toggleAuthMode();
+                        document.getElementById('authEmail').value = '';
+                        document.getElementById('authPassword').value = '';
+                    } else {
+                        showMessage(data.error || 'Registration failed', 'error');
+                    }
+                } catch (error) {
+                    showMessage('Cannot connect to server', 'error');
+                }
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            token = null;
+            currentUser = null;
+            cart = [];
+            updateCartUI();
+            updateUserUI();
+            showMessage('Logged out successfully');
+        }
+
+        function updateUserUI() {
+            const userInfoDiv = document.getElementById('userInfo');
+            if (currentUser && token) {
+                userInfoDiv.innerHTML = `
+                    <span class="user-name">👋 ${currentUser.name}</span>
+                    <button class="btn-logout" onclick="logout()">Logout</button>
+                `;
+            } else {
+                userInfoDiv.innerHTML = `
+                    <button class="btn-login" onclick="toggleAuthModal()">Login / Register</button>
+                `;
+            }
+        }
+
+        async function checkout() {
+            if (!token || !currentUser) {
+                showMessage('Please login to checkout', 'error');
+                toggleAuthModal();
+                return;
+            }
+            
+            if (cart.length === 0) {
+                showMessage('Your cart is empty', 'error');
+                return;
+            }
+            
+            const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            
+            try {
+                const response = await fetch(`${API_URL}/api/orders`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        userId: currentUser._id,
+                        items: cart,
+                        totalAmount: totalAmount
+                    })
+                });
+                
+                if (response.ok) {
+                    showMessage('Order placed successfully! 🎉 Thank you for shopping!');
+                    cart = [];
+                    updateCartUI();
+                    renderCartModal();
+                    toggleCart();
+                } else {
+                    showMessage('Failed to place order', 'error');
+                }
+            } catch (error) {
+                showMessage('Connection error', 'error');
+            }
+        }
+
+        async function loadProducts() {
+            try {
+                const response = await fetch(`${API_URL}/api/products`);
+                if (response.ok) {
+                    products = await response.json();
+                    renderProducts();
+                } else {
+                    document.getElementById('productsGrid').innerHTML = '<div class="loading">Failed to load products. Make sure backend is running.</div>';
+                }
+            } catch (error) {
+                document.getElementById('productsGrid').innerHTML = `
+                    <div style="text-align:center; padding:2rem;">
+                        <h3>⚠️ Cannot connect to Backend</h3>
+                        <p>Please start your backend server:</p>
+                        <code>cd backend && node server.js</code>
+                    </div>
+                `;
+            }
+        }
+
+        function renderProducts() {
+            if (!products || products.length === 0) {
+                document.getElementById('productsGrid').innerHTML = '<div class="loading">No products found. Run seed first!</div>';
+                return;
+            }
+            
+            let html = '';
+            products.forEach(product => {
+                const emoji = getProductEmoji(product.name);
+                html += `
+                    <div class="product-card">
+                        <div class="product-image">${emoji}</div>
+                        <div class="product-info">
+                            <div class="product-name">${escapeHtml(product.name)}</div>
+                            <div class="product-category">${product.category || 'General'}</div>
+                            <div class="product-description">${escapeHtml(product.description || 'High quality product')}</div>
+                            <div class="product-price">$${product.price.toFixed(2)}</div>
+                            <button class="btn-add" onclick='addToCart(${JSON.stringify(product)})'>
+                                🛒 Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            document.getElementById('productsGrid').innerHTML = html;
+        }
+
+        function getProductEmoji(name) {
+            const lowerName = name.toLowerCase();
+            if (lowerName.includes('laptop')) return '💻';
+            if (lowerName.includes('mouse')) return '🖱️';
+            if (lowerName.includes('keyboard')) return '⌨️';
+            if (lowerName.includes('monitor')) return '🖥️';
+            if (lowerName.includes('headphone')) return '🎧';
+            if (lowerName.includes('watch')) return '⌚';
+            if (lowerName.includes('ssd')) return '💾';
+            if (lowerName.includes('hub')) return '🔌';
+            return '📦';
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        async function seedProducts() {
+            try {
+                const response = await fetch(`${API_URL}/api/seed-products`, {
+                    method: 'POST'
+                });
+                const data = await response.json();
+                showMessage(data.message);
+                loadProducts();
+            } catch (error) {
+                console.error('Seed failed:', error);
+            }
+        }
+
+        updateUserUI();
+        updateCartUI();
+        loadProducts();
+        
+        setTimeout(async () => {
+            const response = await fetch(`${API_URL}/api/products`);
+            const existingProducts = await response.json();
+            if (existingProducts.length === 0) {
+                seedProducts();
+            }
+        }, 2000);
+    </script>
+</body>
+</html>
