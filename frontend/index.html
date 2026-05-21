@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,7 +24,7 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .header-content {
@@ -79,7 +80,7 @@
         }
 
         .btn-logout {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             border: none;
             color: white;
             padding: 6px 14px;
@@ -89,7 +90,7 @@
         }
 
         .btn-logout:hover {
-            background: rgba(255,255,255,0.3);
+            background: rgba(255, 255, 255, 0.3);
         }
 
         .btn-login {
@@ -124,13 +125,13 @@
             background: white;
             border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s, box-shadow 0.3s;
         }
 
         .product-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
         }
 
         .product-image {
@@ -204,7 +205,7 @@
             width: 420px;
             height: 100%;
             background: white;
-            box-shadow: -2px 0 20px rgba(0,0,0,0.15);
+            box-shadow: -2px 0 20px rgba(0, 0, 0, 0.15);
             z-index: 1000;
             overflow-y: auto;
         }
@@ -320,7 +321,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0, 0, 0, 0.5);
             z-index: 2000;
             justify-content: center;
             align-items: center;
@@ -336,7 +337,7 @@
             border-radius: 20px;
             width: 380px;
             max-width: 90%;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
         }
 
         .auth-card h2 {
@@ -403,6 +404,7 @@
                 transform: translateX(100%);
                 opacity: 0;
             }
+
             to {
                 transform: translateX(0);
                 opacity: 1;
@@ -423,6 +425,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="header">
         <div class="header-content">
@@ -491,19 +494,19 @@
 
         function renderCartModal() {
             const container = document.getElementById('cartItems');
-            
+
             if (cart.length === 0) {
                 container.innerHTML = '<div class="empty-cart">🛒 Your cart is empty</div>';
                 return;
             }
-            
+
             let total = 0;
             let html = '';
-            
+
             cart.forEach((item, index) => {
                 const itemTotal = item.price * item.quantity;
                 total += itemTotal;
-                
+
                 html += `
                     <div class="cart-item">
                         <div class="cart-item-info">
@@ -519,14 +522,14 @@
                     </div>
                 `;
             });
-            
+
             html += `
                 <div class="cart-total">
                     Total: $${total.toFixed(2)}
                 </div>
                 <button class="btn-checkout" onclick="checkout()">✅ Proceed to Checkout</button>
             `;
-            
+
             container.innerHTML = html;
         }
 
@@ -579,7 +582,7 @@
             const title = document.getElementById('authTitle');
             const nameField = document.getElementById('authName');
             const authButton = document.getElementById('authButton');
-            
+
             if (isLoginMode) {
                 title.textContent = 'Login';
                 nameField.style.display = 'none';
@@ -596,12 +599,12 @@
         async function handleAuth() {
             const email = document.getElementById('authEmail').value;
             const password = document.getElementById('authPassword').value;
-            
+
             if (!email || !password) {
                 showMessage('Please fill all fields', 'error');
                 return;
             }
-            
+
             if (isLoginMode) {
                 try {
                     const response = await fetch(`${API_URL}/api/login`, {
@@ -609,9 +612,9 @@
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ email, password })
                     });
-                    
+
                     const data = await response.json();
-                    
+
                     if (response.ok) {
                         token = data.token;
                         currentUser = { _id: data.userId, name: data.name, email: data.email };
@@ -632,16 +635,16 @@
                     showMessage('Please enter your name', 'error');
                     return;
                 }
-                
+
                 try {
                     const response = await fetch(`${API_URL}/api/register`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ name, email, password })
                     });
-                    
+
                     const data = await response.json();
-                    
+
                     if (response.ok) {
                         showMessage('Registration successful! Please login.', 'success');
                         toggleAuthMode();
@@ -687,14 +690,14 @@
                 toggleAuthModal();
                 return;
             }
-            
+
             if (cart.length === 0) {
                 showMessage('Your cart is empty', 'error');
                 return;
             }
-            
+
             const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            
+
             try {
                 const response = await fetch(`${API_URL}/api/orders`, {
                     method: 'POST',
@@ -705,7 +708,7 @@
                         totalAmount: totalAmount
                     })
                 });
-                
+
                 if (response.ok) {
                     showMessage('Order placed successfully! 🎉 Thank you for shopping!');
                     cart = [];
@@ -745,15 +748,15 @@
                 document.getElementById('productsGrid').innerHTML = '<div class="loading">No products found. Run seed first!</div>';
                 return;
             }
-            
+
             let html = '';
             products.forEach(product => {
                 const emoji = getProductEmoji(product.name);
                 const isUrl = product.image && product.image.startsWith('http');
-                const imageHtml = isUrl 
-                    ? `<img src="${product.image}" alt="${escapeHtml(product.name)}">` 
+                const imageHtml = isUrl
+                    ? `<img src="${product.image}" alt="${escapeHtml(product.name)}">`
                     : emoji;
-                
+
                 html += `
                     <div class="product-card">
                         <div class="product-image">${imageHtml}</div>
@@ -807,7 +810,7 @@
         updateUserUI();
         updateCartUI();
         loadProducts();
-        
+
         setTimeout(async () => {
             const response = await fetch(`${API_URL}/api/products`);
             const existingProducts = await response.json();
@@ -817,4 +820,5 @@
         }, 2000);
     </script>
 </body>
+
 </html>

@@ -70,7 +70,7 @@ db.serialize(() => {
             'headphones.png': 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&auto=format&fit=crop&q=60',
             'watch.png': 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&auto=format&fit=crop&q=60',
             'hub.png': 'https://images.unsplash.com/photo-1468495244123-6c6c332eeece?w=500&auto=format&fit=crop&q=60',
-            'ssd.png': 'https://images.unsplash.com/photo-1541140111813-8222e9d90981?w=500&auto=format&fit=crop&q=60',
+            'ssd.png': 'https://images.unsplash.com/photo-1601524909162-be87252be298?w=500&auto=format&fit=crop&q=60',
             'phone.png': 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500&auto=format&fit=crop&q=60',
             'tablet.png': 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=500&auto=format&fit=crop&q=60',
             'charger.png': 'https://images.unsplash.com/photo-1622445262465-2481c4574875?w=500&auto=format&fit=crop&q=60',
@@ -81,6 +81,12 @@ db.serialize(() => {
         Object.keys(imageMap).forEach(key => {
             db.run("UPDATE products SET image = ? WHERE image = ?", [imageMap[key], key]);
         });
+
+        // Also update the old broken SSD URL to the new high-quality one
+        db.run("UPDATE products SET image = ? WHERE image = ?", [
+            imageMap['ssd.png'],
+            'https://images.unsplash.com/photo-1541140111813-8222e9d90981?w=500&auto=format&fit=crop&q=60'
+        ]);
         
         if (row.count === 0) {
             console.log('Adding sample products...');
