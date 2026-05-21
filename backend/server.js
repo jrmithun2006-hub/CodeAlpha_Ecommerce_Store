@@ -62,18 +62,38 @@ db.serialize(() => {
             return;
         }
         
+        const imageMap = {
+            'laptop.png': 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=500&auto=format&fit=crop&q=60',
+            'mouse.png': 'https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?w=500&auto=format&fit=crop&q=60',
+            'keyboard.png': 'https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?w=500&auto=format&fit=crop&q=60',
+            'monitor.png': 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=500&auto=format&fit=crop&q=60',
+            'headphones.png': 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&auto=format&fit=crop&q=60',
+            'watch.png': 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&auto=format&fit=crop&q=60',
+            'hub.png': 'https://images.unsplash.com/photo-1468495244123-6c6c332eeece?w=500&auto=format&fit=crop&q=60',
+            'ssd.png': 'https://images.unsplash.com/photo-1541140111813-8222e9d90981?w=500&auto=format&fit=crop&q=60',
+            'phone.png': 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500&auto=format&fit=crop&q=60',
+            'tablet.png': 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=500&auto=format&fit=crop&q=60',
+            'charger.png': 'https://images.unsplash.com/photo-1622445262465-2481c4574875?w=500&auto=format&fit=crop&q=60',
+            'webcam.png': 'https://images.unsplash.com/photo-1612444530582-fc66183b16f7?w=500&auto=format&fit=crop&q=60'
+        };
+
+        // Run automatic update migration for any existing products still using the old .png file references
+        Object.keys(imageMap).forEach(key => {
+            db.run("UPDATE products SET image = ? WHERE image = ?", [imageMap[key], key]);
+        });
+        
         if (row.count === 0) {
             console.log('Adding sample products...');
             
             const sampleProducts = [
-                ['Gaming Laptop', 1299, 'High-performance gaming laptop with RTX 4060, 16GB RAM', 'Electronics', 'laptop.png', 10],
-                ['Wireless Mouse', 29, 'Ergonomic wireless mouse with adjustable DPI, silent clicks', 'Accessories', 'mouse.png', 50],
-                ['Mechanical Keyboard', 89, 'RGB mechanical keyboard with blue switches, wrist rest', 'Accessories', 'keyboard.png', 30],
-                ['4K Monitor', 399, '27-inch 4K UHD monitor with IPS panel, 99% sRGB', 'Electronics', 'monitor.png', 15],
-                ['Noise Cancelling Headphones', 199, 'Wireless headphones with active noise cancellation, 30hr battery', 'Audio', 'headphones.png', 25],
-                ['Smart Watch', 249, 'Fitness tracker with heart rate monitor, GPS, 7-day battery', 'Wearables', 'watch.png', 20],
-                ['USB-C Hub', 49, '7-in-1 USB-C hub with HDMI, USB 3.0, SD card reader', 'Accessories', 'hub.png', 40],
-                ['External SSD', 119, '1TB external SSD, USB 3.2, up to 1000MB/s', 'Storage', 'ssd.png', 18]
+                ['Gaming Laptop', 1299, 'High-performance gaming laptop with RTX 4060, 16GB RAM', 'Electronics', imageMap['laptop.png'], 10],
+                ['Wireless Mouse', 29, 'Ergonomic wireless mouse with adjustable DPI, silent clicks', 'Accessories', imageMap['mouse.png'], 50],
+                ['Mechanical Keyboard', 89, 'RGB mechanical keyboard with blue switches, wrist rest', 'Accessories', imageMap['keyboard.png'], 30],
+                ['4K Monitor', 399, '27-inch 4K UHD monitor with IPS panel, 99% sRGB', 'Electronics', imageMap['monitor.png'], 15],
+                ['Noise Cancelling Headphones', 199, 'Wireless headphones with active noise cancellation, 30hr battery', 'Audio', imageMap['headphones.png'], 25],
+                ['Smart Watch', 249, 'Fitness tracker with heart rate monitor, GPS, 7-day battery', 'Wearables', imageMap['watch.png'], 20],
+                ['USB-C Hub', 49, '7-in-1 USB-C hub with HDMI, USB 3.0, SD card reader', 'Accessories', imageMap['hub.png'], 40],
+                ['External SSD', 119, '1TB external SSD, USB 3.2, up to 1000MB/s', 'Storage', imageMap['ssd.png'], 18]
             ];
             
             const stmt = db.prepare("INSERT INTO products (name, price, description, category, image, stock) VALUES (?, ?, ?, ?, ?, ?)");
@@ -198,10 +218,10 @@ app.get('/api/products/:id', (req, res) => {
 // ---------- SEED PRODUCTS (Add more products manually) ----------
 app.post('/api/seed-products', (req, res) => {
     const additionalProducts = [
-        ['Smartphone', 699, 'Latest 5G smartphone with 128GB storage', 'Electronics', 'phone.png', 25],
-        ['Tablet', 399, '10-inch tablet with stylus support', 'Electronics', 'tablet.png', 15],
-        ['Wireless Charger', 29, 'Fast wireless charging pad', 'Accessories', 'charger.png', 45],
-        ['Webcam', 79, '1080p HD webcam with microphone', 'Electronics', 'webcam.png', 20]
+        ['Smartphone', 699, 'Latest 5G smartphone with 128GB storage', 'Electronics', 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500&auto=format&fit=crop&q=60', 25],
+        ['Tablet', 399, '10-inch tablet with stylus support', 'Electronics', 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=500&auto=format&fit=crop&q=60', 15],
+        ['Wireless Charger', 29, 'Fast wireless charging pad', 'Accessories', 'https://images.unsplash.com/photo-1622445262465-2481c4574875?w=500&auto=format&fit=crop&q=60', 45],
+        ['Webcam', 79, '1080p HD webcam with microphone', 'Electronics', 'https://images.unsplash.com/photo-1612444530582-fc66183b16f7?w=500&auto=format&fit=crop&q=60', 20]
     ];
     
     const stmt = db.prepare("INSERT INTO products (name, price, description, category, image, stock) VALUES (?, ?, ?, ?, ?, ?)");
